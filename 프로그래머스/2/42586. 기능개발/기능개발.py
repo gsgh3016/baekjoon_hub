@@ -1,23 +1,22 @@
-from queue import Queue
-
-
 def solution(progresses, speeds):
-    answer = []
-    n = len(speeds)
-    q = Queue()
-    for p, s in zip(progresses, speeds):
-        q.put((p, s))
+    s1 = list(reversed(progresses))
+    s2 = list(reversed(speeds))
+    
     day = 1
-    while not q.empty():
-        p, s = q.get()
-#        print(p, s)
-        day_changed = False
-        while p + day * s < 100:
-#            print(f'cur: {p + day * s}, day: {day}')
+    cnt = 0
+    answer = []
+    while s1:
+        cur_p = s1.pop()
+        cur_s = s2.pop()
+        if cur_p + day * cur_s < 100:
+            if cnt != 0:
+                answer.append(cnt)
+                cnt = 0
+            s1.append(cur_p)
+            s2.append(cur_s)
             day += 1
-            day_changed = True
-        if not day_changed:
-            answer[-1] += 1
         else:
-            answer.append(1)
+            cnt += 1
+    
+    answer.append(cnt)
     return answer
